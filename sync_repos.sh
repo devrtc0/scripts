@@ -66,7 +66,7 @@ do
         [ $? -ne 0 ] && echo "$repo cloning" && exit -1
         upstream=$(echo "$repo_info" | jq -r '.source.ssh_url')
         [ $? -ne 0 ] && echo "upstream parsing for $repo" && exit -1
-        if [ "null" ="$upstream" ]; then
+        if [ "null" = "$upstream" ]; then
             echo "no upstream for $repo"
         else
             cd "$name"
