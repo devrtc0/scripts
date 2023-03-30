@@ -7,12 +7,12 @@ if [ $# -eq 0 ]; then
 fi
 
 if [ -z "$GH_TOKEN" ]; then
-    echo "env TOKEN required"
+    echo "env GH_TOKEN required"
     exit -1
 fi
 
 if [ -z "$GH_USER" ]; then
-    echo "env USER required"
+    echo "env GH_USER required"
     exit -1
 fi
 
@@ -78,9 +78,11 @@ do
     fork=$(echo "$repo_info" | jq '.fork')
     [ $? -ne 0 ] && echo "fork parsing for $repo" && exit -1
     cd "$name"
+    echo "pulling $name"
     git pull
     [ $? -ne 0 ] && echo "pull failed: $repo" && exit -1
     if [ "true" = "$fork" ]; then
+    	echo "fetching $name upstream"
         git fetch upstream
         [ $? -ne 0 ] && echo "fetch failed: $repo" && exit -1
     fi
