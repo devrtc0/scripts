@@ -6,12 +6,12 @@ if [ $# -eq 0 ]; then
     exit -1
 fi
 
-if [ -z "$TOKEN" ]; then
+if [ -z "$GH_TOKEN" ]; then
     echo "env TOKEN required"
     exit -1
 fi
 
-if [ -z "$USER" ]; then
+if [ -z "$GH_USER" ]; then
     echo "env USER required"
     exit -1
 fi
@@ -46,8 +46,8 @@ fi
 
 repos_info=$(curl -SsL \
     -H "Accept: application/vnd.github+json" \
-    -H "Authorization: Bearer $TOKEN" \
-    -H "X-GitHub-Api-Version: $API_VERSION" https://api.github.com/users/$USER/repos)
+    -H "Authorization: Bearer $GH_TOKEN" \
+    -H "X-GitHub-Api-Version: $API_VERSION" https://api.github.com/users/$GH_USER/repos)
 [ $? -ne 0 ] && echo "repos getting" && exit -1
 repos=$(echo "$repos_info" | jq -r '.[] | .ssh_url')
 [ $? -ne 0 ] && echo "repos parsing" && exit -1
@@ -58,8 +58,8 @@ do
     name=$(basename -s '.git' "$repo")
     repo_info=$(curl -SsL \
             -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer $TOKEN" \
-            -H "X-GitHub-Api-Version: $API_VERSION" https://api.github.com/repos/$USER/$name)
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "X-GitHub-Api-Version: $API_VERSION" https://api.github.com/repos/$GH_USER/$name)
     [ $? -ne 0 ] && echo "repo $repo getting" && exit -1
     if [ ! -d "$WORKDIR/$name" ]; then
         git clone "$repo"
