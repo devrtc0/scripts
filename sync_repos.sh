@@ -94,7 +94,7 @@ do
     if [ ! -d "$WORKDIR/$name" ]; then
         git clone "$repo"
         [ $? -ne 0 ] && error "$repo cloning" && exit -1
-        upstream=$(echo "$repo_info" | jq -r '.source.ssh_url')
+        upstream=$(echo "$repo_info" | jq -r '.parent.ssh_url')
         [ $? -ne 0 ] && error "upstream parsing for $repo" && exit -1
         if [ "null" = "$upstream" ]; then
             info "no upstream for $repo"
