@@ -77,7 +77,7 @@ fi
 repos_info=$(curl -SsL \
     -H "Accept: application/vnd.github+json" \
     -H "Authorization: Bearer $GH_TOKEN" \
-    -H "X-GitHub-Api-Version: $API_VERSION" https://api.github.com/users/$GH_USER/repos)
+    -H "X-GitHub-Api-Version: $API_VERSION" 'https://api.github.com/user/repos?per_page=100')
 [ $? -ne 0 ] && error "repos getting" && exit -1
 repos=$(echo "$repos_info" | jq -r '.[] | .ssh_url')
 [ $? -ne 0 ] && error "repos parsing" && exit -1
