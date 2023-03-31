@@ -117,8 +117,14 @@ do
         [ $? -ne 0 ] && error "fetch failed: $repo" && exit -1
         branch=$(git branch --show-current)
         [ $? -ne 0 ] && error "branch getting failed: $repo" && exit -1
-        git merge "upstream/$branch"
-        [ $? -ne 0 ] && error "sync failed: $repo" && exit -1
+        git diff --exit-code "$branch" "upstream/$branch" >/dev/null
+        if [ $? -ne 0 ]; then
+        	info 'there is diff -> merging'
+			git merge "upstream/$branch"
+			[ $? -ne 0 ] && error "sync failed: $repo" && exit -1
+			git push origin
+			[ $? -ne 0 ] && error "pushing origin failed: $repo" && exit -1
+        fi
     fi
     cd ..
 done
