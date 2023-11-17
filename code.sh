@@ -6,7 +6,7 @@ declare -A categories=(
 	["dev"]="usernamehw.errorlens"
 	["misc"]="DotJoshJohnson.xml rangav.vscode-thunder-client"
 	["java"]="redhat.java vscjava.vscode-java-test vscjava.vscode-java-dependency vscjava.vscode-maven vscjava.vscode-java-debug vscjava.vscode-java-pack"
-	["spring"]="Pivotal.vscode-spring-boot vscjava.vscode-spring-boot-dashboard vscjava.vscode-spring-initializr Pivotal.vscode-boot-dev-pack"
+	["spring"]="vmware.vscode-spring-boot vscjava.vscode-spring-boot-dashboard vscjava.vscode-spring-initializr vmware.vscode-boot-dev-pack"
 )
 
 if [ $# -eq 0 ]; then
