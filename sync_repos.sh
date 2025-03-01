@@ -85,8 +85,11 @@ repos=$(echo "$repos_info" | jq -r '.[] | .ssh_url')
 cd $WORKDIR
 for repo in $repos
 do
+    date
     name=$(basename -s '.git' "$repo")
     repo_info=$(curl -SsL \
+			--retry 3 \
+   			--connect-timeout 10 \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer $GH_TOKEN" \
             -H "X-GitHub-Api-Version: $API_VERSION" https://api.github.com/repos/$GH_USER/$name)
