@@ -82,6 +82,12 @@ repos_info=$(curl -SsL \
 repos=$(echo "$repos_info" | jq -r '.[] | .ssh_url')
 [ $? -ne 0 ] && error "repos parsing" && exit -1
 
+if [ -z "$FORCE" ]; then
+	FORCE=false
+else
+	FORCE=true
+fi
+
 cd $WORKDIR
 for repo in $repos
 do
@@ -94,19 +100,21 @@ do
             -H "Authorization: Bearer $GH_TOKEN" \
             -H "X-GitHub-Api-Version: $API_VERSION" https://api.github.com/repos/$GH_USER/$name)
     [ $? -ne 0 ] && error "repo $repo getting" && exit -1
-    topics=($(echo "$repo_info" | jq -r '.topics[]' | tr '\n' ' '))
-    found=false
-    for topic in "${topics[@]}"; do
-        if [ "$topic" = "backup" ]; then
-            found=true
-            break
-        fi
-    done
-    if $found; then
-        info "updating $repo"
-    else
-        info "skip updating $repo"
-        continue
+    if [ ! $FORCE ]; then
+		topics=($(echo "$repo_info" | jq -r '.topics[]' | tr '\n' ' '))
+	    found=false
+	    for topic in "${topics[@]}"; do
+	        if [ "$topic" = "backup" ]; then
+	            found=true
+	            break
+	        fi
+	    done
+	    if $found; then
+	        info "updating $repo"
+	    else
+	        info "skip updating $repo"
+	        continue
+	    fi
     fi
     if [ ! -d "$WORKDIR/$name" ]; then
         git clone "$repo"
