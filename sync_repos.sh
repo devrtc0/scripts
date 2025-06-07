@@ -85,6 +85,7 @@ repos=$(echo "$repos_info" | jq -r '.[] | .ssh_url')
 if [ -z "$FORCE" ]; then
 	FORCE=false
 else
+    msg "FORCE update"
 	FORCE=true
 fi
 
@@ -100,7 +101,7 @@ do
             -H "Authorization: Bearer $GH_TOKEN" \
             -H "X-GitHub-Api-Version: $API_VERSION" https://api.github.com/repos/$GH_USER/$name)
     [ $? -ne 0 ] && error "repo $repo getting" && exit -1
-    if [ ! $FORCE ]; then
+    if ! $FORCE; then
 		topics=($(echo "$repo_info" | jq -r '.topics[]' | tr '\n' ' '))
 	    found=false
 	    for topic in "${topics[@]}"; do
