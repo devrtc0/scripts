@@ -96,7 +96,7 @@ do
     [ $? -ne 0 ] && error "repo $repo getting" && exit -1
     topics=($(echo "$repo_info" | jq -r '.topics[]' | tr '\n' ' '))
     found=false
-    for topic in "@{topics[@]}"; do
+    for topic in "${topics[@]}"; do
         if [ "$topic" = "backup" ]; then
             found=true
             break
